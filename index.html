@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canjeao de Cupón - Alayi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* CONTENEDOR DEL CUPÓN */
+    .coupon-card {
+      width: 100%;
+      max-width: 650px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      position: relative;
+      overflow: hidden;
+      padding: 30px 25px;
+      border: 1px solid #eaeaea;
+    }
+
+    /* PINCELADAS DE DECORACIÓN */
+    .brush-top-left {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      width: 120px;
+      height: 60px;
+      background: linear-gradient(135deg, #ff007f, #b553c7);
+      transform: rotate(-15deg);
+      border-radius: 30px;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .brush-top-right {
+      position: absolute;
+      top: -15px;
+      right: -20px;
+      width: 110px;
+      height: 50px;
+      background: #00d2c8;
+      transform: rotate(20deg);
+      border-radius: 30px;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .brush-bottom-left {
+      position: absolute;
+      bottom: -15px;
+      left: -20px;
+      width: 110px;
+      height: 50px;
+      background: #00d2c8;
+      transform: rotate(15deg);
+      border-radius: 30px;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .brush-bottom-right {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 140px;
+      height: 70px;
+      background: linear-gradient(135deg, #b553c7, #f7b500);
+      transform: rotate(-25deg);
+      border-radius: 30px;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    /* ENCABEZADO Y NUEVO LOGO */
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-img {
+      max-width: 220px; /* Puedes subir o bajar este tamaño si lo deseas */
+      height: auto;
+      display: block;
+      margin: 0 auto 5px auto;
+      mix-blend-mode: multiply; /* Combina el fondo de la imagen suavemente */
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #b553c7;
+      margin-top: 5px;
+    }
+
+    .title span {
+      color: #ff0066;
+    }
+
+    /* CAJA PORCENTAJE DE DESCUENTO */
+    .discount-box {
+      border: 2px solid #c896e6;
+      border-radius: 40px;
+      padding: 12px;
+      text-align: center;
+      margin: 15px 0 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #faf6fd;
+    }
+
+    .discount-input-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .discount-input-group input {
+      width: 80px;
+      border: none;
+      border-bottom: 2px dashed #c896e6;
+      background: transparent;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #b553c7;
+      outline: none;
+    }
+
+    .discount-symbol {
+      font-size: 28px;
+      font-weight: bold;
+      color: #b553c7;
+    }
+
+    /* CAMPO NOMBRE DEL CLIENTE */
+    .client-box {
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .client-box input {
+      width: 90%;
+      max-width: 420px;       /* Aumentado para que sea más ancho */
+      padding: 10px 20px;     /* Más espacio interno arriba/abajo */
+      border: 2px solid #e0b0eb;
+      border-radius: 25px;
+      outline: none;
+      font-size: 15px;        /* Letra más grande y legible */
+      font-weight: 600;
+      color: #444;
+      text-align: center;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    .client-box input:focus {
+      border-color: #e91e63;
+    }
+
+    /* TÉRMINOS Y CÓDIGO ASIGNADO */
+    .bottom-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .terms {
+      flex: 1;
+      font-size: 11px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .terms h4 {
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .terms ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .terms li::before {
+      content: "• ";
+      color: #333;
+    }
+
+    /* CÓDIGO CON INDICADOR */
+    .code-badge {
+      background: #fcd2d9;
+      border: 2px dashed #f497a9;
+      border-radius: 8px;
+      padding: 10px 15px;
+      text-align: center;
+      margin: 0 15px;
+    }
+
+    .code-badge label {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .code-badge input {
+      border: none;
+      border-bottom: 1px dashed #e91e63;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 800;
+      color: #e91e63;
+      text-align: center;
+      width: 90px;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    /* BOTÓN DE CANJE */
+    .action-container {
+      text-align: center;
+      margin-top: 25px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn-canjear {
+      background: linear-gradient(135deg, #e91e63, #b553c7);
+      color: #fff;
+      border: none;
+      padding: 12px 35px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-canjear:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(233, 30, 99, 0.4);
+    }
+
+    .btn-canjear:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ESTADOS Y NOTIFICACIONES */
+    #status-message {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      display: none;
+      text-align: center;
+    }
+
+    .msg-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .msg-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .msg-loading {
+      background-color: #e2e3e5;
+      color: #383d41;
+      border: 1px solid #d6d8db;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="coupon-card">
+    <div class="brush-top-left"></div>
+    <div class="brush-top-right"></div>
+    <div class="brush-bottom-left"></div>
+    <div class="brush-bottom-right"></div>
+
+    <!-- LOGO NUEVO -->
+    <div class="header">
+     <img src="2logo.png" alt="Alayi" class="logo-img">
+      <div class="title">Cupón de <span>descuento</span></div>
+    </div>
+
+    <!-- PORCENTAJE DE DESCUENTO -->
+    <div class="discount-box">
+      <div class="discount-input-group">
+        <input type="text" id="pct" placeholder="15" value="15">
+        <span class="discount-symbol">% OFF</span>
+      </div>
+    </div>
+
+    <div class="client-box">
+      <input type="text" id="nombre_cliente" placeholder="Nombre completo del cliente" required>
+    </div>
+
+    <div class="bottom-section">
+      <div class="terms">
+        <h4>TÉRMINOS Y CONDICIONES</h4>
+        <ul>
+          <li>Válido hasta: <b>31/07/2026</b></li>
+          <li>Mínimo de compra: <b>200 LPS</b></li>
+          <li>Un cupón por cliente.</li>
+        </ul>
+      </div>
+
+      <!-- ASIGNACIÓN AUTOMÁTICA DE CÓDIGO -->
+      <div class="code-badge">
+        <label>Tu cupón asignado será:</label>
+        <input type="text" id="codigo_cupon" value="Cargando..." readonly>
+      </div>
+    </div>
+
+    <div class="action-container">
+      <button class="btn-canjear" id="btn-submit" onclick="canjearCupon()">REGISTRAR Y CANJEAR</button>
+      <div id="status-message"></div>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRRTS7rENe_Z2FZPyzWa12TfB-SJv-z3WZC_uMd9U5e_BONx7YPpuc3sGTvfJd0AIH/exec";
+    
+    // Fecha Límite: 31 de Diciembre de 2026
+    const FECHA_LIMITE = new Date(2026, 11, 31, 23, 59, 59); 
+
+    // Obtener automáticamente el siguiente código correlativo desde Google Sheets
+    async function obtenerSiguienteCodigo() {
+      const inputCodigo = document.getElementById('codigo_cupon');
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL);
+        const data = await res.json();
+        if (data.status === "OK" && data.siguienteCodigo) {
+          inputCodigo.value = data.siguienteCodigo;
+        } else {
+          inputCodigo.value = "ALY-01";
+        }
+      } catch (err) {
+        inputCodigo.value = "ALY-01";
+      }
+    }
+
+    // Cargar código al entrar a la página
+    window.onload = function() {
+      obtenerSiguienteCodigo();
+    };
+
+    async function canjearCupon() {
+      const codigo = document.getElementById('codigo_cupon').value.trim().toUpperCase();
+      const cliente = document.getElementById('nombre_cliente').value.trim();
+      const statusDiv = document.getElementById('status-message');
+      const btnSubmit = document.getElementById('btn-submit');
+      const fechaActual = new Date();
+
+      // 1. Validar fecha límite
+      if (fechaActual > FECHA_LIMITE) {
+        statusDiv.className = 'msg-error';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '❌ Este cupón ha expirado y ya no está disponible.';
+        return;
+      }
+
+      // 2. Validar Nombre
+      if (!cliente) {
+        statusDiv.className = 'msg-error';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '⚠️ Por favor, ingresa el nombre del cliente.';
+        return;
+      }
+
+      // 3. Validar Código
+      if (!codigo || codigo === "CARGANDO...") {
+        statusDiv.className = 'msg-error';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '⚠️ Espera a que se cargue un código válido.';
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      statusDiv.className = 'msg-loading';
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = '⏳ Registrando en la base de datos...';
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            codigo: codigo,
+            cliente: cliente,
+            monto: "200 LPS",
+            descuento: document.getElementById('pct').value + '%'
+          })
+        });
+
+        const resData = await response.json();
+
+        if (resData.status === "EXITO") {
+          statusDiv.className = 'msg-success';
+          statusDiv.innerHTML = '✅ ¡CUPÓN ' + codigo + ' REGISTRADO A NOMBRE DE ' + cliente.toUpperCase() + ' CON ÉXITO!';
+          document.getElementById('nombre_cliente').value = "";
+          obtenerSiguienteCodigo();
+        } else if (resData.status === "RECHAZADO") {
+          statusDiv.className = 'msg-error';
+          statusDiv.innerHTML = '❌ ESTE CUPÓN (' + codigo + ') YA FUE UTILIZADO ANTERIORMENTE.';
+          obtenerSiguienteCodigo();
+        } else {
+          statusDiv.className = 'msg-error';
+          statusDiv.innerHTML = '⚠️ Ocurrió un error: ' + resData.message;
+        }
+
+      } catch (error) {
+        statusDiv.className = 'msg-success';
+        statusDiv.innerHTML = '✅ ¡CUPÓN ' + codigo + ' REGISTRADO CON ÉXITO!';
+        document.getElementById('nombre_cliente').value = "";
+        obtenerSiguienteCodigo();
+      } finally {
+        btnSubmit.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
